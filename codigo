@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <string.h>
+
+int cod[20], idade[20], total = 0;
+char nome[20][50];
+float nota[20];
+
+int buscar(int c) {
+    for (int i = 0; i < total; i++)
+        if (cod[i] == c) return i;
+    return -1;
+}
+
+void cadastrar() {
+    if (total == 20) {
+        printf("Limite atingido!\n");
+        return;
+    }
+
+    int c;
+    printf("Matricula: ");
+    scanf("%d", &c);
+
+    if (buscar(c) != -1) {
+        printf("Matricula ja existe!\n");
+        return;
+    }
+
+    cod[total] = c;
+    printf("Nome (sem espacos): ");
+    scanf("%49s", nome[total]);
+    printf("Idade: ");
+    scanf("%d", &idade[total]);
+    printf("Nota: ");
+    scanf("%f", &nota[total]);
+
+    total++;
+    printf("Aluno cadastrado!\n");
+}
+
+void mostrar(int i) {
+    printf("Matricula: %d | Nome: %s | Idade: %d | Nota: %.2f\n",
+           cod[i], nome[i], idade[i], nota[i]);
+}
+
+void consultar() {
+    int c;
+    printf("Matricula: ");
+    scanf("%d", &c);
+    int p = buscar(c);
+
+    if (p == -1) printf("Aluno nao encontrado.\n");
+    else mostrar(p);
+}
+
+void listar() {
+    if (total == 0) printf("Nenhum aluno cadastrado.\n");
+    for (int i = 0; i < total; i++) mostrar(i);
+}
+
+void alterar() {
+    int c;
+    printf("Matricula do aluno: ");
+    scanf("%d", &c);
+    int p = buscar(c);
+
+    if (p == -1) {
+        printf("Aluno nao encontrado.\n");
+        return;
+    }
+
+    printf("Novo nome (sem espacos): ");
+    scanf("%49s", nome[p]);
+    printf("Nova idade: ");
+    scanf("%d", &idade[p]);
+    printf("Nova nota: ");
+    scanf("%f", &nota[p]);
+    printf("Aluno alterado!\n");
+}
+
+void excluir() {
+    int c;
+    printf("Matricula do aluno: ");
+    scanf("%d", &c);
+    int p = buscar(c);
+
+    if (p == -1) {
+        printf("Aluno nao encontrado.\n");
+        return;
+    }
+
+    for (int i = p; i < total - 1; i++) {
+        cod[i] = cod[i + 1];
+        idade[i] = idade[i + 1];
+        nota[i] = nota[i + 1];
+        strcpy(nome[i], nome[i + 1]);
+    }
+
+    total--;
+    printf("Aluno excluido!\n");
+}
+
+int main() {
+    int op;
+
+    do {
+        printf("\n1-Cadastrar  2-Consultar  3-Listar\n");
+        printf("4-Alterar  5-Excluir  0-Sair\nOpcao: ");
+        scanf("%d", &op);
+
+        switch (op) {
+            case 1: cadastrar(); break;
+            case 2: consultar(); break;
+            case 3: listar(); break;
+            case 4: alterar(); break;
+            case 5: excluir(); break;
+            case 0: printf("Fim do sistema.\n"); break;
+            default: printf("Opcao invalida!\n");
+        }
+    } while (op != 0);
+
+    return 0;
+}
